@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * @author Sergey Golitsyn
@@ -13,6 +15,7 @@ import lombok.EqualsAndHashCode;
 @Table
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Cache(region = "PermissionCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Permission extends BaseEntity {
     private String name;
     private String code;

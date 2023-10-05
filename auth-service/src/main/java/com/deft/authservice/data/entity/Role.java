@@ -2,6 +2,8 @@ package com.deft.authservice.data.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cache;
 
 import java.util.List;
 
@@ -16,6 +18,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Cache(region = "RoleCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Role extends BaseEntity {
 
     private String name;

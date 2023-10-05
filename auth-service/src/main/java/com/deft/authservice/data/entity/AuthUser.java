@@ -2,6 +2,8 @@ package com.deft.authservice.data.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cache;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Cache(region = "AuthUserCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AuthUser extends BaseEntity implements UserDetails {
 
     private String username;
