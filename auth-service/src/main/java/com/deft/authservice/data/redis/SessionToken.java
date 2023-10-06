@@ -5,21 +5,19 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.redis.core.RedisHash;
 
-import java.util.List;
-import java.util.UUID;
-
 /**
  * @author Sergey Golitsyn
  * created on 05.10.2023
+ *
+ * Session Token for Authentication. Store uniq token and user Id into Session Store
  */
-@RedisHash(value = "user", timeToLive = 300)
+@RedisHash(value = "session_token", timeToLive = 300)
 @Getter
 @Setter
-public class UserRedis {
+public class SessionToken {
 
     @Id
     private String id;
     private String userId;
-    private List<String> roles;
 
 }

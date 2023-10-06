@@ -1,11 +1,12 @@
 package com.deft.authservice.service.impl;
 
-import com.deft.authservice.data.redis.UserRedis;
-import com.deft.authservice.repo.redis.UserRepository;
+import com.deft.authservice.data.entity.AuthUser;
+import com.deft.authservice.data.redis.SessionToken;
+import com.deft.authservice.repo.postgres.AuthUserRepository;
+import com.deft.authservice.repo.redis.SessionTokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,8 +33,8 @@ public class AuthServiceRedis {
 
     private static final String BEARER_PREFIX = "Bearer ";
 
-    private final RedisTemplate<String, String> redis;
-    private final UserRepository userRepository;
+    private final SessionTokenRepository sessionTokenRepository;
+    private final AuthUserRepository authUserRepository;
 
     public Optional<Authentication> authenticate(HttpServletRequest request) {
         return extractBearerTokenHeader(request).flatMap(this::lookup);
@@ -41,10 +42,16 @@ public class AuthServiceRedis {
 
     private Optional<Authentication> lookup(String token) {
         try {
-            Optional<UserRedis> userOptional = userRepository.findById(token);
+            Optional<SessionToken> userOptional = sessionTokenRepository.findById(token);
             if (userOptional.isPresent()) {
-                UserRedis userRedis = userOptional.get();
-                Authentication authentication = createAuthentication(userRedis.getId(), userRedis.getRoles());
+                SessionToken sessionToken = userOptional.get();
+                String userId = sessionToken.getUserId();
+                Optional<AuthUser> authUserOptional = authUserRepository.findById(userId);
+                if (authUserOptional.isEmpty()){
+                    log.warn("User not found with id {}", userId);
+                    return Optional.empty();
+                }
+                Authentication authentication = createAuthentication(sessionToken.getId(), authUserOptional.get());
                 return Optional.of(authentication);
             }
             return Optional.empty();
@@ -72,12 +79,12 @@ public class AuthServiceRedis {
         }
     }
 
-    private static Authentication createAuthentication(String actor, @NonNull List<String> roles) {
+    private static Authentication createAuthentication(String token, AuthUser authUser) {
         // The difference between `hasAuthority` and `hasRole` is that the latter uses the `ROLE_` prefix
-        List<GrantedAuthority> authorities = roles.stream()
+        List<GrantedAuthority> authorities = authUser.getRoles().stream()
                 .distinct()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
                 .collect(toList());
-        return new UsernamePasswordAuthenticationToken(nonNull(actor) ? actor : "N/A", "N/A", authorities);
+        return new UsernamePasswordAuthenticationToken(nonNull(token) ? token : "N/A", "N/A", authorities);
     }
 }

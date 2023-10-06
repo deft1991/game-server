@@ -10,6 +10,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 /**
  * @author Sergey Golitsyn
  * created on 05.10.2023
+ *
+ * Permissions in our system. Based on permissions we can change user flow.
  */
 @Entity
 @Table

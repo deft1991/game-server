@@ -1,6 +1,5 @@
-package com.deft.authservice.repo;
+package com.deft.authservice.repo.postgres;
 
-import com.deft.authservice.data.entity.AuthUser;
 import com.deft.authservice.data.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

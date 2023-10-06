@@ -1,18 +1,22 @@
 package com.deft.authservice.data.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
-import java.time.OffsetDateTime;
 
 /**
  * @author Sergey Golitsyn
  * created on 05.10.2023
+ *
+ * Base entity for all other entities
  */
 @MappedSuperclass
 @Getter
@@ -23,8 +27,7 @@ public class BaseEntity implements Serializable {
     private static final long serialVersionUID = -278971545601962170L;
 
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @UuidGenerator
     private String id;
 
     private Instant createDate;

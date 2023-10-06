@@ -10,7 +10,10 @@ import java.util.List;
 /**
  * @author Sergey Golitsyn
  * created on 05.10.2023
+ *
+ * Security roles in our system. We can close some endpoints with @PreAuthorize
  */
+
 @Entity
 @Table
 @Data

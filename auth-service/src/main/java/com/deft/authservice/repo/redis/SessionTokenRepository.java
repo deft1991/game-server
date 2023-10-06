@@ -1,6 +1,6 @@
 package com.deft.authservice.repo.redis;
 
-import com.deft.authservice.data.redis.UserRedis;
+import com.deft.authservice.data.redis.SessionToken;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
  * created on 05.10.2023
  */
 @Repository
-public interface UserRepository extends CrudRepository<UserRedis, String> {
+public interface SessionTokenRepository extends CrudRepository<SessionToken, String> {
 }

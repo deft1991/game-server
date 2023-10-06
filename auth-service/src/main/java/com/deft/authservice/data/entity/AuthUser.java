@@ -2,8 +2,8 @@ package com.deft.authservice.data.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
 /**
  * @author Sergey Golitsyn
  * created on 05.10.2023
+ * <p>
+ * Entity for authentication. Do not use it for any busines logic.
+ * This class implements UserDetails for Spring Security purposes.
  */
 
 @Entity

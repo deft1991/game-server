@@ -2,17 +2,16 @@ package com.deft.authservice.controller;
 
 import com.deft.authservice.data.entity.AuthUser;
 import com.deft.authservice.data.entity.Role;
-import com.deft.authservice.data.redis.UserRedis;
-import com.deft.authservice.repo.AuthUserRepository;
-import com.deft.authservice.repo.RoleRepository;
-import com.deft.authservice.repo.redis.UserRepository;
+import com.deft.authservice.data.redis.SessionToken;
+import com.deft.authservice.repo.postgres.AuthUserRepository;
+import com.deft.authservice.repo.postgres.RoleRepository;
+import com.deft.authservice.repo.redis.SessionTokenRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author Sergey Golitsyn
@@ -24,19 +23,20 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RegistrationController {
 
-    private final UserRepository userRepository;
+    private final SessionTokenRepository sessionTokenRepository;
     private final AuthUserRepository authUserRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     private final List<String> defaultRoles = List.of("user");
 
     @PostMapping("/register")
-    public String basicRegisterUser() {
+    public String basicRegisterUser(@RequestParam String userName, @RequestParam String userPassword) {
         List<Role> roles = roleRepository.findByNameIn(defaultRoles);
         AuthUser authUser = AuthUser.builder()
-                .username("email.here")
+                .username(userName)
                 // Encode the password before saving to the database
-                .password("password.here") // todo add encoder
+                .password(passwordEncoder.encode(userPassword))
                 .enabled(true)
                 .accountNonExpired(true)
                 .credentialsNonExpired(true)
@@ -47,35 +47,27 @@ public class RegistrationController {
         authUser = authUserRepository.save(authUser);
 
 
-        UserRedis u = new UserRedis();
+        SessionToken u = new SessionToken();
         u.setUserId(authUser.getId());
-        List<String> roleNames = authUser
-                .getRoles()
-                .stream()
-                .map(Role::getName)
-                .collect(Collectors.toList());
-        u.setRoles(roleNames);
         // Encode the password before saving to the database
-        UserRedis save = userRepository.save(u);
+        SessionToken save = sessionTokenRepository.save(u);
         return save.getId();
     }
 
     @PostMapping("/sign-in")
     public @ResponseBody String signIn(@RequestParam String userName, @RequestParam String userPassword) {
-        Optional<AuthUser>  authUserOptional = authUserRepository.findByUsernameAndPassword(userName, userPassword);
+        Optional<AuthUser>  authUserOptional = authUserRepository.findByUsername(userName);
         if (authUserOptional.isEmpty()){
             throw new RuntimeException("User not found");
         }
+        AuthUser authUser = authUserOptional.get();
+        if (!passwordEncoder.matches(userPassword, authUser.getPassword())){
+            throw new RuntimeException("Incorrect password");
+        }
 
-        List<String> roles = authUserOptional
-                .get()
-                .getRoles()
-                .stream()
-                .map(Role::getName)
-                .collect(Collectors.toList());
-        UserRedis userRedis = new UserRedis();
-        userRedis.setRoles(roles);
-        userRedis = userRepository.save(userRedis);
-        return userRedis.getId();
+        SessionToken sessionToken = new SessionToken();
+        sessionToken.setUserId(authUser.getId());
+        sessionToken = sessionTokenRepository.save(sessionToken);
+        return sessionToken.getId();
     }
 }

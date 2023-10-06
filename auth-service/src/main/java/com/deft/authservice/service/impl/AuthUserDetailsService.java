@@ -1,7 +1,7 @@
 package com.deft.authservice.service.impl;
 
 import com.deft.authservice.data.entity.AuthUser;
-import com.deft.authservice.repo.AuthUserRepository;
+import com.deft.authservice.repo.postgres.AuthUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AccountStatusUserDetailsChecker;
 import org.springframework.security.core.userdetails.UserDetails;
