@@ -1,5 +1,6 @@
 package com.deft.authservice.data.entity;
 
+import jakarta.persistence.Cacheable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -17,6 +18,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Cacheable
 @Cache(region = "PermissionCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Permission extends BaseEntity {
     private String name;

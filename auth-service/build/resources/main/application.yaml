@@ -12,19 +12,33 @@ spring:
     show-sql: true
     properties:
       hibernate:
+        use_sql_comments: true
+        format_sql: true
+        generate_statistics: true
+        session.events.log: true
         cache:
+          use_query_cache: true
           use_second_level_cache: true
+          region:
+            factory_class: org.redisson.hibernate.RedissonRegionFactory
   application:
     name: auth-server
   data:
     redis:
       host: localhost
       port: 6379
+      password: eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
 logging:
   level:
     root: ERROR
-    net:
-      shahto: DEBUG
+    com:
+      deft: DEBUG
     org:
       hibernate:
+        SQL: DEBUG
         cache: DEBUG
+        stat: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE

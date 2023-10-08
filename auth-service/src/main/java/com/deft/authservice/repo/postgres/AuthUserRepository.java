@@ -1,7 +1,10 @@
 package com.deft.authservice.repo.postgres;
 
 import com.deft.authservice.data.entity.AuthUser;
-import org.springframework.data.jpa.repository.JpaRepository;
+import jakarta.persistence.QueryHint;
+import org.hibernate.jpa.HibernateHints;
+import org.springframework.data.jpa.repository.QueryHints;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -13,6 +16,7 @@ import java.util.Optional;
  *
  */
 @Repository
-public interface AuthUserRepository extends JpaRepository<AuthUser, String> {
+public interface AuthUserRepository extends CrudRepository<AuthUser, String> {
+    @QueryHints(@QueryHint(name = HibernateHints.HINT_CACHEABLE, value = "true"))
     Optional<AuthUser> findByUsername(String username);
 }

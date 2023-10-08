@@ -21,12 +21,14 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Cacheable
 @Cache(region = "RoleCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Role extends BaseEntity {
 
     private String name;
     private String code;
 
+    @Cache(region = "PermissionCache", usage = CacheConcurrencyStrategy.READ_WRITE)
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "permission_role",

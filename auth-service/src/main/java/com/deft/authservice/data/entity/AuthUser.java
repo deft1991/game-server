@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Cacheable
 @Cache(region = "AuthUserCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AuthUser extends BaseEntity implements UserDetails {
 
@@ -38,6 +39,7 @@ public class AuthUser extends BaseEntity implements UserDetails {
     private boolean credentialsNonExpired;
     private boolean accountNonLocked;
 
+    @Cache(region = "RoleCache", usage = CacheConcurrencyStrategy.READ_WRITE)
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "role_auth_user",
