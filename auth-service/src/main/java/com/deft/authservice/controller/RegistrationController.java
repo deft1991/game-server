@@ -16,6 +16,10 @@ import java.util.Optional;
 /**
  * @author Sergey Golitsyn
  * created on 05.10.2023
+ * <p>
+ * Route /v1/auth is open and do not need security check
+ * Use /register to register a new user --> return session token
+ * Use /sign-in --> return session token
  */
 
 @RestController
@@ -30,6 +34,12 @@ public class RegistrationController {
 
     private final List<String> defaultRoles = List.of("user");
 
+    /**
+     *
+     * @param userName - user name or email
+     * @param userPassword - user password
+     * @return session token for user
+     */
     @PostMapping("/register")
     public String basicRegisterUser(@RequestParam String userName, @RequestParam String userPassword) {
         List<Role> roles = roleRepository.findByNameIn(defaultRoles);
@@ -54,6 +64,10 @@ public class RegistrationController {
         return save.getId();
     }
 
+    /**
+     *
+     * @return session token for user
+     */
     @PostMapping("/sign-in")
     public @ResponseBody String signIn(@RequestParam String userName, @RequestParam String userPassword) {
         Optional<AuthUser>  authUserOptional = authUserRepository.findByUsername(userName);

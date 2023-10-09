@@ -4,6 +4,7 @@ import com.deft.authservice.data.entity.AuthUser;
 import com.deft.authservice.data.redis.SessionToken;
 import com.deft.authservice.repo.postgres.AuthUserRepository;
 import com.deft.authservice.repo.redis.SessionTokenRepository;
+import com.deft.authservice.service.AuthServiceRedis;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,7 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AuthServiceRedis {
+public class AuthServiceRedisImpl implements AuthServiceRedis {
 
     private static final String BEARER_PREFIX = "Bearer ";
 

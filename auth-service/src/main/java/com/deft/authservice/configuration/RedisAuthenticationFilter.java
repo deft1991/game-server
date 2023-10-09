@@ -1,6 +1,6 @@
 package com.deft.authservice.configuration;
 
-import com.deft.authservice.service.impl.AuthServiceRedis;
+import com.deft.authservice.service.AuthServiceRedis;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,11 +18,14 @@ import java.util.Optional;
 /**
  * @author Sergey Golitsyn
  * created on 05.10.2023
+ *
+ * Handle HttpRequest here and authenticate it with AuthServiceRedis
  */
 
 @Component
 @RequiredArgsConstructor
 public class RedisAuthenticationFilter extends OncePerRequestFilter {
+
     private final AuthServiceRedis authServiceRedis;
 
     @Override

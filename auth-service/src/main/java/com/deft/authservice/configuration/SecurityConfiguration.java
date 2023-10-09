@@ -20,6 +20,8 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 /**
  * @author Sergey Golitsyn
  * created on 05.10.2023
+ *
+ * Basic Spring Boot Security configuration
  */
 @Configuration
 @EnableWebSecurity

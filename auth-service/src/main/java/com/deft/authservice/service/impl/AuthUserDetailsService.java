@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 /**
  * @author Sergey Golitsyn
  * created on 05.10.2023
+ *
+ * Implementation of Spring Security UserDetailsService
  */
 @Service
 @RequiredArgsConstructor
