@@ -1,0 +1,11 @@
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':metrics-lib')
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

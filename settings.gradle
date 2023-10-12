@@ -1,0 +1,6 @@
+rootProject.name = 'game-server'
+
+include 'auth-service'
+include 'metrics-lib'
+include 'reward-service'
+include 'notification-service'

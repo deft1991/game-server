@@ -1,0 +1,17 @@
+
+bootJar { enabled = false }
+jar { enabled = true }
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "io.micrometer:micrometer-registry-prometheus" // For Micrometer metrics with Prometheus
+//    implementation "io.micrometer:micrometer-tracing-bridge-brave" // For Tracing Context Propagation with Micrometer Tracing, we need to pick a tracer bridge
+//    implementation 'com.github.loki4j:loki-logback-appender:1.4.2' // Since we have Micrometer Tracing on the classpath, the logs are automatically correlated (that is, they contain a unique trace identifier). Now we need to ship the logs
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

@@ -2,6 +2,8 @@ server:
   port: 5858
 
 spring:
+  main:
+    web-application-type: reactive
   datasource:
     url: jdbc:postgresql://localhost:5432/authorization_server
     username: authorization_server
@@ -28,6 +30,20 @@ spring:
       host: localhost
       port: 6379
       password: eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    # Gateway configuration
+#    cloud:
+#      gateway:
+#        routes:
+#          - id: rewardService
+#            uri: http://localhost:8081/
+#            predicates:
+#              - Path=/reward/**
+#          - id: notificationService
+#            uri: http://localhost:8082/
+#            predicates:
+#              - Path=/notification/**
+
+  # End Gateway Configuration
 logging:
   level:
     root: ERROR
