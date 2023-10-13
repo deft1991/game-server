@@ -13,22 +13,6 @@
         <module name="game-server.auth-service.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="17">
-      <module name="auth-service" target="17" />
-      <module name="auth-service.main" target="17" />
-      <module name="auth-service.test" target="17" />
-      <module name="metrics-service" target="21" />
-      <module name="metrics-service.main" target="21" />
-      <module name="metrics-service.test" target="21" />
-      <module name="notification-service" target="21" />
-      <module name="notification-service.main" target="21" />
-      <module name="notification-service.test" target="21" />
-      <module name="reward-service" target="21" />
-      <module name="reward-service.main" target="21" />
-      <module name="reward-service.test" target="21" />
-      <module name="test" target="17" />
-      <module name="test.main" target="17" />
-      <module name="test.test" target="17" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="21" />
   </component>
 </project>

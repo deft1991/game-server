@@ -8,6 +8,7 @@ import com.deft.auth.repo.postgres.RoleRepository;
 import com.deft.auth.repo.redis.SessionTokenRepository;
 import io.micrometer.observation.annotation.Observed;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,7 @@ import java.util.Optional;
  * Use /sign-in --> return session token
  */
 
+@Slf4j
 @RestController
 @RequestMapping("/v1/auth")
 @RequiredArgsConstructor

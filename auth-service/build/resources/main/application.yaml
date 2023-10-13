@@ -2,8 +2,7 @@ server:
   port: 5858
 
 spring:
-  main:
-    web-application-type: reactive
+  thread-executor: virtual
   datasource:
     url: jdbc:postgresql://localhost:5432/authorization_server
     username: authorization_server
@@ -58,3 +57,6 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

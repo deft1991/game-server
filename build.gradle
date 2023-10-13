@@ -18,9 +18,15 @@ repositories {
 
 ext {
     lombokVersion = "1.18.30"
+    tomcatVersion = "11.0.0-M12"
 }
 
 dependencies {
+    implementation "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}"
+    implementation "org.apache.tomcat.embed:tomcat-embed-el:${tomcatVersion}"
+    implementation "org.apache.tomcat.embed:tomcat-embed-websocket:${tomcatVersion}"
+    implementation "org.apache.tomcat:tomcat-annotations-api:${tomcatVersion}"
+
     implementation 'org.springframework.boot:spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
@@ -37,7 +43,7 @@ subprojects {
 
     group = 'com.altosai'
     version = '0.0.1-SNAPSHOT'
-    sourceCompatibility = '17'
+    sourceCompatibility = '21'
 
     configurations {
         developmentOnly
