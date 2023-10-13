@@ -54,3 +54,8 @@ To start Grafana and Prometheus call [docker-compose-grafana-prometheus.yml](mon
 Grafana available on http://localhost:3000/ . On first start you need to login with login/password - admin/admin. And then you should change it.
 
 Prometheus available on http://localhost:9090/
+
+### Gateway
+
+Check this article to understand better https://haris-zujo.medium.com/spring-cloud-gateway-request-filtering-and-redirection-9e4b6d559d1a
+

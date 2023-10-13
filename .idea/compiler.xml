@@ -11,6 +11,7 @@
         <module name="game-server.metrics-lib.main" />
         <module name="game-server.reward-service.main" />
         <module name="game-server.auth-service.main" />
+        <module name="game-server.gateway-service.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="21" />

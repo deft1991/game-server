@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/auth-service/game-server.auth-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/auth-service/game-server.auth-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gateway-service/game-server.gateway-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/gateway-service/game-server.gateway-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/metrics-lib/game-server.metrics-lib.main.iml" filepath="$PROJECT_DIR$/.idea/modules/metrics-lib/game-server.metrics-lib.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/notification-service/game-server.notification-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/notification-service/game-server.notification-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/reward-service/game-server.reward-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/reward-service/game-server.reward-service.main.iml" />

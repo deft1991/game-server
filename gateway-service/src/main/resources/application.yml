@@ -1,0 +1,22 @@
+
+spring:
+  cloud:
+    gateway:
+      global-filter:
+        - LoggingGlobalFilter
+      routes:
+        - id: reward
+          uri: http://localhost:8081
+          predicates:
+            - Path=/reward/**
+        - id: notification
+          uri: http://localhost:8082
+          predicates:
+            - Path=/notification/**
+        - id: auth
+          uri: http://localhost:5858
+          predicates:
+            - Path=/auth/**
+          filters:
+#            - RedirectionFilter
+            - BeforeRedirectionFilter

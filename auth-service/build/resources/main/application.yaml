@@ -1,8 +1,12 @@
 server:
   port: 5858
+  servlet:
+    context-path: /auth
 
 spring:
   thread-executor: virtual
+  application:
+    name: auth-server
   datasource:
     url: jdbc:postgresql://localhost:5432/authorization_server
     username: authorization_server
@@ -22,8 +26,6 @@ spring:
           use_second_level_cache: true
           region:
             factory_class: org.redisson.hibernate.RedissonRegionFactory
-  application:
-    name: auth-server
   data:
     redis:
       host: localhost
