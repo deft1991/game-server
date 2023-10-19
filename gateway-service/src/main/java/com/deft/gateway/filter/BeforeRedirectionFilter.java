@@ -1,10 +1,14 @@
 package com.deft.gateway.filter;
 
+import jakarta.validation.constraints.NotEmpty;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.OrderedGatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * @author Sergey Golitsyn
@@ -13,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@Validated
 public class BeforeRedirectionFilter extends AbstractGatewayFilterFactory<BeforeRedirectionFilter.Config> {
 
     public BeforeRedirectionFilter() {
@@ -26,19 +31,13 @@ public class BeforeRedirectionFilter extends AbstractGatewayFilterFactory<Before
         }, 0);
     }
 
+    @Getter
+    @Setter
     public static class Config {
+        @NotEmpty
         private String name;
 
-        public Config(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
+        @NotEmpty
+        private String value;
     }
 }

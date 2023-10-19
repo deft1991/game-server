@@ -72,9 +72,9 @@ public class RegistrationController {
      *
      * @return session token for user
      */
-    @PostMapping("/sign-in")
-    @Observed(name = "registrationController_signIn")
-    public @ResponseBody String signIn(@RequestParam String userName, @RequestParam String userPassword) {
+    @PostMapping("/login")
+    @Observed(name = "registrationController_login")
+    public @ResponseBody String login(@RequestParam String userName, @RequestParam String userPassword) {
         Optional<AuthUser>  authUserOptional = authUserRepository.findByUsername(userName);
         if (authUserOptional.isEmpty()){
             throw new RuntimeException("User not found");

@@ -3,6 +3,7 @@ spring:
   cloud:
     gateway:
       global-filter:
+        - AuthenticationFilter
         - LoggingGlobalFilter
       routes:
         - id: reward
@@ -19,4 +20,16 @@ spring:
             - Path=/auth/**
           filters:
 #            - RedirectionFilter
-            - BeforeRedirectionFilter
+            - name: BeforeRedirectionFilter
+              args:
+                name: BeforeRedirectionFilter
+                value: someValue
+#            - name: ErrorHandlingFilter
+#              args:
+#                name: ErrorHandlingFilter
+#                value: someValue
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
