@@ -32,26 +32,28 @@ public class AuthenticationFilter implements GlobalFilter {
         ServerHttpRequest request = exchange.getRequest();
 
         if (routerValidator.isSecured.test(request)) {
-            if (this.isAuthMissing(request))
-                return this.onError(exchange, "Authorization header is missing in request", HttpStatus.UNAUTHORIZED);
+            if (isAuthMissing(request)) {
+                return onError(exchange, "Authorization header is missing in request", HttpStatus.UNAUTHORIZED);
+            }
 
-            final String token = extractBearerToken(this.getAuthHeader(request));
+            final String token = extractBearerToken(getAuthHeader(request));
 
             // Get the sessionToken by ID from the cache service
             return sessionTokenService.getSessionToken(token)
                     .flatMap(sessionToken -> {
                         if (sessionToken != null && sessionToken.getUserId() != null) {
                             // User exists, populate request with headers
-                            this.populateRequestWithHeaders(exchange, sessionToken);
+                            populateRequestWithHeaders(exchange, sessionToken);
                             // Continue the filter chain
                             return chain.filter(exchange);
                         } else {
                             // User is empty, return an error response
-                            return this.onError(exchange, "Authorization header is invalid", HttpStatus.UNAUTHORIZED);
+                            return onError(exchange, "Authorization token is invalid", HttpStatus.UNAUTHORIZED);
                         }
                     })
-                    .thenEmpty(this.onError(exchange, "Authorization header is invalid", HttpStatus.UNAUTHORIZED));
+                    .then(Mono.empty()); // Return an empty Mono, indicating the filter chain has completed
         }
+
         return chain.filter(exchange);
     }
 

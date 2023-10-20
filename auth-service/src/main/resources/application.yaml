@@ -31,18 +31,6 @@ spring:
       host: localhost
       port: 6379
       password: eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
-    # Gateway configuration
-#    cloud:
-#      gateway:
-#        routes:
-#          - id: rewardService
-#            uri: http://localhost:8081/
-#            predicates:
-#              - Path=/reward/**
-#          - id: notificationService
-#            uri: http://localhost:8082/
-#            predicates:
-#              - Path=/notification/**
 
   # End Gateway Configuration
 logging:

@@ -17,6 +17,7 @@ spring:
             - Path=/auth/**
           filters:
 #            - RedirectionFilter
+#            - RewritePath=/product-service/(?<segment>/?.*),$\{segment}
             - name: BeforeRedirectionFilter
               args:
                 name: BeforeRedirectionFilter
