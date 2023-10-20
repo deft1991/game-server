@@ -2,9 +2,6 @@
 spring:
   cloud:
     gateway:
-      global-filter:
-        - AuthenticationFilter
-        - LoggingGlobalFilter
       routes:
         - id: reward
           uri: http://localhost:8081
@@ -24,10 +21,6 @@ spring:
               args:
                 name: BeforeRedirectionFilter
                 value: someValue
-#            - name: ErrorHandlingFilter
-#              args:
-#                name: ErrorHandlingFilter
-#                value: someValue
   data:
     redis:
       host: localhost

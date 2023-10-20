@@ -1,12 +1,12 @@
-package com.deft.gateway.filter;
+package com.deft.gateway.filter.global;
 
 import com.deft.gateway.data.SessionToken;
 import com.deft.gateway.service.RouterValidator;
 import com.deft.gateway.service.SessionTokenService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -20,7 +20,6 @@ import java.util.StringTokenizer;
  * @author Sergey Golitsyn
  * created on 16.10.2023
  */
-@RefreshScope
 @Component
 @RequiredArgsConstructor
 public class AuthenticationFilter implements GlobalFilter {
@@ -41,7 +40,7 @@ public class AuthenticationFilter implements GlobalFilter {
             // Get the sessionToken by ID from the cache service
             return sessionTokenService.getSessionToken(token)
                     .flatMap(sessionToken -> {
-                        if (sessionToken != null) {
+                        if (sessionToken != null && sessionToken.getUserId() != null) {
                             // User exists, populate request with headers
                             this.populateRequestWithHeaders(exchange, sessionToken);
                             // Continue the filter chain
@@ -62,7 +61,8 @@ public class AuthenticationFilter implements GlobalFilter {
     private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(httpStatus);
-        return response.setComplete();
+        DataBufferFactory bufferFactory = response.bufferFactory();
+        return response.writeWith(Mono.just(bufferFactory.wrap(err.getBytes())));
     }
 
     private String getAuthHeader(ServerHttpRequest request) {
