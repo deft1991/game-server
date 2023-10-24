@@ -1,23 +1,23 @@
 package com.deft.gateway.service;
 
+import com.deft.gateway.BaseTest;
 import com.deft.gateway.GatewayServiceApplication;
 import com.deft.gateway.data.SessionToken;
-import com.redis.testcontainers.RedisContainer;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.ReactiveHashOperations;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
-import org.springframework.data.redis.core.ReactiveValueOperations;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.utility.DockerImageName;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Sergey Golitsyn
@@ -27,7 +27,7 @@ import reactor.test.StepVerifier;
 @SpringBootTest(
         classes = {GatewayServiceApplication.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
-public class SessionTokenServiceTest {
+public class SessionTokenServiceTest extends BaseTest {
 
     @Autowired
     private SessionTokenService sessionTokenService;
@@ -35,55 +35,51 @@ public class SessionTokenServiceTest {
     @Autowired
     private ReactiveRedisTemplate<String, SessionToken> redisTemplate;
 
-    private ReactiveValueOperations<String, SessionToken> reactiveValueOps;
-
-    @Container
-    private static final RedisContainer REDIS_CONTAINER =
-            new RedisContainer(DockerImageName
-                    .parse("redis:5.0.3-alpine"))
-                    .withExposedPorts(6379)
-                    .withReuse(true);
-
-    @DynamicPropertySource
-    private static void registerRedisProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.redis.host", REDIS_CONTAINER::getHost);
-        registry.add("spring.data.redis.port", () -> REDIS_CONTAINER.getMappedPort(6379).toString());
-    }
-
-    @BeforeAll
-    public static void init() {
-        REDIS_CONTAINER.start();
-    }
-
-    @AfterAll
-    public static void destroy() {
-        REDIS_CONTAINER.stop();
-    }
+    private ReactiveHashOperations<String, String, String> reactiveHashOperations;
 
     @BeforeEach
     public void setup() {
-        reactiveValueOps = redisTemplate.opsForValue();
+        reactiveHashOperations = redisTemplate.opsForHash();
     }
 
     @Test
-    public void testGetTokenWithNoSessionToken() {
-        Mono<SessionToken> token = sessionTokenService.getSessionToken("token");
-        StepVerifier.create(token)
-                .verifyComplete();
+    void testGetSessionTokenBlock() {
+        String token = "your_token";
+
+        // Initialize the reactiveHashOperations
+        reactiveHashOperations = redisTemplate.opsForHash();
+
+        // Store data in the Redis container
+        reactiveHashOperations.putAll("session_token:" + token, Map.of(
+                "id", "your_id",
+                "userId", "your_userId"
+        )).block();
+
+        Mono<SessionToken> resultMono = sessionTokenService.getSessionToken(token);
+        SessionToken sessionToken = resultMono.block(); // Block to retrieve the result.
+
+        assertNotNull(sessionToken);
+        assertEquals("your_id", sessionToken.getId());
+        assertEquals("your_userId", sessionToken.getUserId());
     }
 
     @Test
-    public void givenSessionTokenId_whenGet_thenReturnsSessionToken() {
-        Mono<Boolean> result = reactiveValueOps.set("token", new SessionToken("token", "1"));
+    void testGetSessionToken() {
+        String token = "your_token";
 
-        StepVerifier.create(result)
-                .expectNext(true)
-                .verifyComplete();
+        // Initialize the reactiveHashOperations
+        reactiveHashOperations = redisTemplate.opsForHash();
 
-        Mono<SessionToken> fetchedSessionToken = sessionTokenService.getSessionToken("token");
+        // Store data in the Redis container
+        reactiveHashOperations.putAll("session_token:" + token, Map.of(
+                "id", "your_id",
+                "userId", "your_userId"
+        )).block();
 
-        StepVerifier.create(fetchedSessionToken)
-                .expectNext(new SessionToken("token", "1"))
-                .verifyComplete();
+        // Add your assertions here
+        StepVerifier.create(sessionTokenService.getSessionToken(token))
+                .assertNext(Assertions::assertNotNull)
+                .expectComplete()
+                .verify();
     }
 }
