@@ -27,7 +27,7 @@ public class AuthUserDetailsService implements UserDetailsService {
         AuthUser user =
                 authUserRepository
                         .findByUsername(username)
-                        .orElseThrow(() -> new RuntimeException("User not found"));
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         new AccountStatusUserDetailsChecker().check(user);
         return user;

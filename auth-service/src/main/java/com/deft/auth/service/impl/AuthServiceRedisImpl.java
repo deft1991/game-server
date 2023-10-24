@@ -17,6 +17,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,7 +85,9 @@ public class AuthServiceRedisImpl implements AuthServiceRedis {
 
     private static Authentication createAuthentication(String token, AuthUser authUser) {
         // The difference between `hasAuthority` and `hasRole` is that the latter uses the `ROLE_` prefix
-        List<GrantedAuthority> authorities = authUser.getRoles().stream()
+        List<GrantedAuthority> authorities = Optional.ofNullable(authUser.getRoles())
+                .orElse(Collections.emptyList())  // Handle null roles by providing an empty list
+                .stream()
                 .distinct()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
                 .collect(toList());

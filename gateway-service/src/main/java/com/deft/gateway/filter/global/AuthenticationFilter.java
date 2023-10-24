@@ -24,9 +24,16 @@ import java.util.StringTokenizer;
 @RequiredArgsConstructor
 public class AuthenticationFilter implements GlobalFilter {
 
-    private final RouterValidator routerValidator;//custom route validator
+    private final RouterValidator routerValidator; //custom route validator
     private final SessionTokenService sessionTokenService;
 
+    /**
+     * Gateway security filter.
+     * Receive ServerWebExchange.
+     * Check that endpoint secured.
+     * Trying to parse Bearer token.
+     * Go to session token service and try to get token from store.
+     */
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();

@@ -18,6 +18,10 @@ public class RouterValidator {
             "/auth/login"
     );
 
+    /**
+     * Non Secured Endpoints.
+     * @see com.deft.gateway.filter.global.AuthenticationFilter
+     */
     public Predicate<ServerHttpRequest> isSecured =
             request -> openApiEndpoints
                     .stream()

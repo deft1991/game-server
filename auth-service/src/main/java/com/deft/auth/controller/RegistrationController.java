@@ -1,5 +1,7 @@
 package com.deft.auth.controller;
 
+import com.deft.auth.data.dto.UserLoginDto;
+import com.deft.auth.data.dto.UserRegisterDto;
 import com.deft.auth.data.entity.AuthUser;
 import com.deft.auth.data.entity.Role;
 import com.deft.auth.data.redis.SessionToken;
@@ -7,6 +9,7 @@ import com.deft.auth.repo.postgres.AuthUserRepository;
 import com.deft.auth.repo.postgres.RoleRepository;
 import com.deft.auth.repo.redis.SessionTokenRepository;
 import io.micrometer.observation.annotation.Observed;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,19 +41,16 @@ public class RegistrationController {
     private final List<String> defaultRoles = List.of("user");
 
     /**
-     *
-     * @param userName - user name or email
-     * @param userPassword - user password
      * @return session token for user
      */
     @PostMapping("/register")
     @Observed(name = "registrationController_basicRegisterUser")
-    public String basicRegisterUser(@RequestParam String userName, @RequestParam String userPassword) {
+    public String basicRegisterUser(@Valid @RequestBody UserRegisterDto dto) {
         List<Role> roles = roleRepository.findByNameIn(defaultRoles);
         AuthUser authUser = AuthUser.builder()
-                .username(userName)
+                .username(dto.name())
                 // Encode the password before saving to the database
-                .password(passwordEncoder.encode(userPassword))
+                .password(passwordEncoder.encode(dto.password()))
                 .enabled(true)
                 .accountNonExpired(true)
                 .credentialsNonExpired(true)
@@ -74,13 +74,13 @@ public class RegistrationController {
      */
     @PostMapping("/login")
     @Observed(name = "registrationController_login")
-    public @ResponseBody String login(@RequestParam String userName, @RequestParam String userPassword) {
-        Optional<AuthUser>  authUserOptional = authUserRepository.findByUsername(userName);
+    public @ResponseBody String login(@Valid @RequestBody UserLoginDto dto) {
+        Optional<AuthUser> authUserOptional = authUserRepository.findByUsername(dto.name());
         if (authUserOptional.isEmpty()){
             throw new RuntimeException("User not found");
         }
         AuthUser authUser = authUserOptional.get();
-        if (!passwordEncoder.matches(userPassword, authUser.getPassword())){
+        if (!passwordEncoder.matches(dto.password(), authUser.getPassword())) {
             throw new RuntimeException("Incorrect password");
         }
 
