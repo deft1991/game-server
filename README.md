@@ -12,19 +12,16 @@
   - [Register](#Register)
   - [Login](#Login)
 
-<a name="Basic-game-server"></a>
 # Basic game server
 
 Contains multimodule structure. You can use each module as independent service. 
 The main idea is to prepare generic game-server and adopt it to different games.
 
-<a name="TODOs"></a>
 ### TODOs
 
 I will try to add all these modules. For test purposes I will use H2 in-memory DataBase.
 Also I'm going to add Dev profile with local PostgresDB. You can configure your DB settings.
 
-<a name="Multimodule-Structure"></a>
 ### Multimodule Structure
 
 Use it to understand how it works https://reflectoring.io/spring-boot-gradle-multi-module/
