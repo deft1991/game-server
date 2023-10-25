@@ -1,13 +1,30 @@
-# Basic game server. 
+
+- [ Basic game server ](#Basic-game-server)
+  - [ ToDOs ](#TODOs)
+  - [ Multimodule Structure ](#Multimodule-Structure)
+  - [Auth service](#Auth-service)
+  - [Redis as L2 Hibernate cache](#Redis-as-L2-Hibernate-cache)
+  - [Gateway](#Gateway)
+- [Metrics and Monitoring](#Metrics-and-Monitoring)
+  - [Metrics](#Metrics)
+  - [Monitoring](#Monitoring)
+- [User Flow](#User-Flow)
+  - [Register](#Register)
+  - [Login](#Login)
+
+<a name="Basic-game-server"></a>
+# Basic game server
 
 Contains multimodule structure. You can use each module as independent service. 
 The main idea is to prepare generic game-server and adopt it to different games.
 
+<a name="TODOs"></a>
 ### TODOs
 
 I will try to add all these modules. For test purposes I will use H2 in-memory DataBase.
 Also I'm going to add Dev profile with local PostgresDB. You can configure your DB settings.
 
+<a name="Multimodule-Structure"></a>
 ### Multimodule Structure
 
 Use it to understand how it works https://reflectoring.io/spring-boot-gradle-multi-module/
@@ -31,6 +48,8 @@ Use [docker-compose-postgres-and-pg-admin.yml](docker%2Fauth-service%2Fdocker-co
 Also I'm using Redis as a second cache layer in hibernate.
 Configuration file for L2 cache --> [redisson.yaml](auth-service%2Fsrc%2Fmain%2Fresources%2Fredisson.yaml)
 Use [docker-compose-redis-only.yml](docker%2Fauth-service%2Fdocker-compose-redis-only.yml) to start Redis in Docker
+
+## Metrics and Monitoring
 
 ### Metrics
 
@@ -59,3 +78,22 @@ Prometheus available on http://localhost:9090/
 
 Check this article to understand better https://haris-zujo.medium.com/spring-cloud-gateway-request-filtering-and-redirection-9e4b6d559d1a
 
+### User Flow
+
+#### Register
+
+To register a new user call POST: http://localhost:8080/auth/v1/auth/register?userName=1&userPassword=1
+
+You need to pass userName and userPassword as path variables
+
+As a response you'll receive SessionToken. 
+With SessionToken you can call other protected resources.
+
+#### Login
+
+To register a new user call POST: http://localhost:8080/auth/v1/auth/login?userName=1&userPassword=1
+
+You need to pass userName and userPassword as path variables
+
+As a response you'll receive SessionToken. 
+With SessionToken you can call other protected resources
