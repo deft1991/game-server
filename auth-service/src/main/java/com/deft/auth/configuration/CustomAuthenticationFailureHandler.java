@@ -38,4 +38,5 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
         // Convert the response to JSON and write it to the response
         objectMapper.writeValue(response.getWriter(), errorResponse);
     }
+
 }

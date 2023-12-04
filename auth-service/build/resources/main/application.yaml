@@ -33,12 +33,15 @@ spring:
       password: eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
 
   # End Gateway Configuration
+
 logging:
   level:
     root: ERROR
     com:
       deft: DEBUG
     org:
+      springframework:
+        security: DEBUG
       hibernate:
         SQL: DEBUG
         cache: DEBUG
