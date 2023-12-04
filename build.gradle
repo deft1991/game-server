@@ -45,6 +45,11 @@ subprojects {
     version = '0.0.1-SNAPSHOT'
     sourceCompatibility = '21'
 
+    repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+
     configurations {
         developmentOnly
         runtimeClasspath {
@@ -56,6 +61,7 @@ subprojects {
     }
 
     dependencies {
+//        implementation project(':metrics-lib') // enable metrics for all projects8
         implementation 'org.springframework.boot:spring-boot-starter-aop'
         implementation 'org.springframework.boot:spring-boot-starter-actuator'
         implementation "org.projectlombok:lombok:${lombokVersion}"
